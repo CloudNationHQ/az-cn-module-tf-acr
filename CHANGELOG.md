@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/CloudNationHQ/az-cn-module-tf-acr/compare/v0.1.0...v0.2.0) (2023-06-28)
+
+
+### Features
+
+* add initial testing ([#5](https://github.com/CloudNationHQ/az-cn-module-tf-acr/issues/5)) ([c88f1f8](https://github.com/CloudNationHQ/az-cn-module-tf-acr/commit/c88f1f87df22fb285ab77166cd7122c239225807))
+
 ## 0.1.0 (2023-06-28)
 
 
