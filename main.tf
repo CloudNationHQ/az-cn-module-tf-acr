@@ -97,7 +97,7 @@ resource "azurerm_container_registry" "acr" {
   }
 
   #can only be enabled at creation time
-  dynamic "encryption" { w w w
+  dynamic "encryption" {
     for_each = try(var.registry.encryption.enable, false) == true ? [1] : []
 
     content {
