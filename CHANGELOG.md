@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/CloudNationHQ/az-cn-module-tf-acr/compare/v0.2.0...v0.3.0) (2023-06-29)
+
+
+### Features
+
+* refactor workflows and fix linting issues ([#7](https://github.com/CloudNationHQ/az-cn-module-tf-acr/issues/7)) ([cbee76b](https://github.com/CloudNationHQ/az-cn-module-tf-acr/commit/cbee76b81bf36df32c00e612da51d45c60c83241))
+
 ## [0.2.0](https://github.com/CloudNationHQ/az-cn-module-tf-acr/compare/v0.1.0...v0.2.0) (2023-06-28)
 
 
