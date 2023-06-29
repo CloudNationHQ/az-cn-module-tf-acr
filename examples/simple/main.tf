@@ -17,8 +17,8 @@ module "rg" {
 module "acr" {
   source = "../../"
 
-  workload       = var.workload
-  environment    = var.environment
+  workload    = var.workload
+  environment = var.environment
 
   registry = {
     location      = module.rg.groups.demo.location
