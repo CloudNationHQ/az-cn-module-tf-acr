@@ -24,3 +24,14 @@ locals {
     }
   ])
 }
+
+locals {
+  pools = {
+    for pool_key, pool in var.registry.agentpools : pool_key => {
+      name           = pool_key
+      instance_count = try(pool.instances, 1)
+      tier           = try(pool.tier, "S2")
+      tasks          = try(pool.tasks, {})
+    }
+  }
+}

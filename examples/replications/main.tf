@@ -31,5 +31,4 @@ module "acr" {
       eus2 = { location = "eastus2", regional_endpoint_enabled = true }
     }
   }
-  depends_on = [module.rg]
 }

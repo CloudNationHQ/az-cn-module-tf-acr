@@ -45,7 +45,6 @@ module "kv" {
       }
     }
   }
-  depends_on = [module.rg]
 }
 
 module "acr" {
@@ -65,5 +64,4 @@ module "acr" {
       role_assignment_scope = module.kv.vault.id
     }
   }
-  depends_on = [module.rg]
 }

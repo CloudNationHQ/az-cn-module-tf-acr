@@ -45,7 +45,6 @@ module "kv" {
       }
     }
   }
-  depends_on = [module.rg]
 }
 
 module "acr" {
@@ -85,5 +84,4 @@ module "acr" {
       eus = { location = "eastus" }
     }
   }
-  depends_on = [module.rg]
 }
