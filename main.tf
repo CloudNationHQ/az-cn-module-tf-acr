@@ -187,3 +187,84 @@ resource "azurerm_container_registry_agent_pool" "pools" {
   tier                      = each.value.tier
   virtual_network_subnet_id = var.registry.agentpools[each.key].subnet
 }
+
+resource "azurerm_container_registry_task" "tasks" {
+  for_each = {
+    for task in local.tasks : "${task.pool_name}.${task.task_name}" => task
+  }
+
+  agent_pool_name       = each.value.pool_name
+  container_registry_id = azurerm_container_registry.acr.id
+  name                  = each.value.task_name
+
+  base_image_trigger {
+    name                        = "defaultBaseimageTriggerName"
+    type                        = each.value.base_image_trigger_type
+    update_trigger_payload_type = "Default"
+  }
+
+  docker_step {
+    context_access_token = each.value.context_access_token
+    context_path         = each.value.context_path
+    dockerfile_path      = each.value.dockerfile_path
+    image_names          = each.value.image_names
+  }
+
+  platform {
+    architecture = "amd64"
+    os           = "Linux"
+  }
+
+  source_trigger {
+    branch         = each.value.source_branch
+    events         = each.value.source_events
+    name           = "defaultSourceTriggerName"
+    repository_url = each.value.repository_url
+    source_type    = each.value.source_type
+    authentication {
+      token_type = "PAT"
+      token      = each.value.access_token
+    }
+  }
+}
+
+# dns zone
+resource "azurerm_private_dns_zone" "zone" {
+  for_each = contains(keys(var.registry), "private_link") ? { "default" = var.registry.private_link } : {}
+
+  name                = "privatelink.azurecr.io"
+  resource_group_name = var.registry.resourcegroup
+}
+
+# network link
+resource "azurerm_private_dns_zone_virtual_network_link" "link" {
+  for_each = contains(keys(var.registry), "private_link") ? { "default" = var.registry.private_link } : {}
+
+  name                  = "link${random_string.random.result}"
+  resource_group_name   = var.registry.resourcegroup
+  private_dns_zone_name = azurerm_private_dns_zone.zone[each.key].name
+  virtual_network_id    = var.registry.private_link.vnet
+  registration_enabled  = true
+}
+
+# private endpoint
+resource "azurerm_private_endpoint" "endpoint" {
+  for_each = contains(keys(var.registry), "private_link") ? { "default" = var.registry.private_link } : {}
+
+  name                = "pep-${var.workload}-${var.environment}"
+  location            = var.registry.location
+  resource_group_name = var.registry.resourcegroup
+  subnet_id           = var.registry.private_link.subnet
+
+  private_service_connection {
+    name                           = "endpoint"
+    is_manual_connection           = false
+    private_connection_resource_id = azurerm_container_registry.acr.id
+    subresource_names              = ["registry"]
+  }
+
+  private_dns_zone_group {
+    name                 = "default"
+    private_dns_zone_ids = [azurerm_private_dns_zone.zone[each.key].id]
+  }
+}

@@ -34,4 +34,23 @@ locals {
       tasks          = try(pool.tasks, {})
     }
   }
+
+  tasks = flatten([
+    for pool_key, pool in local.pools : [
+      for task_key, task in try(pool.tasks, {}) : {
+        pool_name               = azurerm_container_registry_agent_pool.pools[pool_key].name
+        task_name               = task_key
+        base_image_trigger_type = try(task.base_image_type, "Runtime")
+        context_access_token    = task.access_token
+        context_path            = task.context_path
+        dockerfile_path         = task.dockerfile_path
+        image_names             = task.image_names
+        source_branch           = try(task.source_branch, "main")
+        source_events           = task.source_events
+        repository_url          = task.repository_url
+        source_type             = try(task.source_type, "Github")
+        access_token            = task.access_token
+      }
+    ]
+  ])
 }
