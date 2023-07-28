@@ -19,6 +19,8 @@ A last key goal is to separate logic from configuration in the module, thereby e
 - data protection is enhanced by encryption for data at rest
 - utilization of terratest for robust validation.
 - supports enhanced scalability and isolation through dedicated agent pools
+- flexibility to deploy multiple tasks using agent pools
+- private link for secure network connections
 
 The below examples shows the usage when consuming the module:
 
@@ -113,6 +115,67 @@ module "acr" {
 }
 ````
 
+## Usage: agent pool tasks
+
+```hcl
+module "acr" {
+  source = "github.com/cloudnationhq/az-cn-module-tf-acr"
+
+  workload    = var.workload
+  environment = var.environment
+
+  registry = {
+    location      = module.rg.groups.demo.location
+    resourcegroup = module.rg.groups.demo.name
+    sku           = "Premium"
+
+    private_link = {
+      vnet   = module.network.vnet.id
+      subnet = module.network.subnets.plink.id
+    }
+
+    agentpools = {
+      demo = {
+        instances = 2
+        subnet    = module.network.subnets.demo.id
+        tasks = {
+          demo1 = {
+            access_token    = var.pat
+            repository_url  = "https://github.com/cloudnationhq/az-cn-module-tf-acr.git"
+            context_path    = "https://github.com/cloudnationhq/az-cn-module-tf-acr.git#main"
+            dockerfile_path = ".azdo/Dockerfile"
+            image_names     = ["azdoagent:latest"]
+            source_events   = ["commit"]
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+## Usage: private link
+
+```hcl
+module "acr" {
+  source = "github.com/cloudnationhq/az-cn-module-tf-acr"
+
+  workload    = var.workload
+  environment = var.environment
+
+  registry = {
+    location      = module.rg.groups.demo.location
+    resourcegroup = module.rg.groups.demo.name
+    sku           = "Premium"
+
+    private_link = {
+      vnet   = module.network.vnet.id
+      subnet = module.network.subnets.plink.id
+    }
+  }
+}
+```
+
 ## Resources
 
 | Name | Type |
@@ -127,6 +190,10 @@ module "acr" {
 | [azurerm_container_registry_token_password](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/container_registry_token_password) | resource |
 | [azurerm_key_vault_secret](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_secret) | resource |
 | [azurerm_container_registry_agent_pool](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/container_registry_agent_pool) | resource |
+| [azurerm_container_registry_task](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/container_registry_task) | resource |
+| [azurerm_private_dns_zone](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_zone) | resource |
+| [azurerm_private_dns_zone_virtual_network_link](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_zone_virtual_network_link) | resource |
+| [azurerm_private_endpoint](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint) | resource |
 
 ## Inputs
 
@@ -155,6 +222,10 @@ The second variation is an extended test. This test performs additional validati
 The third variation allows for specific deployment tests. By providing a unique test name in the github workflow, it overrides the default extended test, executing the specific deployment test instead.
 
 Each of these tests contributes to the robustness and resilience of the module. They ensure the module performs consistently and accurately under different scenarios and configurations.
+
+## Notes
+
+For the agent pool task, a personal access token with the repo scope is required
 
 ## Authors
 
