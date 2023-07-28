@@ -174,3 +174,16 @@ resource "azurerm_key_vault_secret" "secret2" {
   value        = azurerm_container_registry_token_password.password[each.key].password2[0].value
   key_vault_id = each.value.key_vault_id
 }
+
+# agent pools
+resource "azurerm_container_registry_agent_pool" "pools" {
+  for_each = local.pools
+
+  name                      = each.value.name
+  container_registry_name   = azurerm_container_registry.acr.name
+  instance_count            = each.value.instance_count
+  location                  = var.registry.location
+  resource_group_name       = var.registry.resourcegroup
+  tier                      = each.value.tier
+  virtual_network_subnet_id = var.registry.agentpools[each.key].subnet
+}

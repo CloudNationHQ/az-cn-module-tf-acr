@@ -18,6 +18,7 @@ A last key goal is to separate logic from configuration in the module, thereby e
 - detailed access control is ensured through the use of scope maps
 - data protection is enhanced by encryption for data at rest
 - utilization of terratest for robust validation.
+- supports enhanced scalability and isolation through dedicated agent pools
 
 The below examples shows the usage when consuming the module:
 
@@ -35,7 +36,6 @@ module "acr" {
     resourcegroup = module.rg.groups.demo.name
     sku           = "Premium"
   }
-  depends_on = [module.rg]
 }
 ```
 
@@ -59,7 +59,6 @@ module "acr" {
       eus2 = { location = "eastus2", regional_endpoint_enabled = true }
     }
   }
-  depends_on = [module.rg]
 }
 ```
 
@@ -83,7 +82,6 @@ module "acr" {
       role_assignment_scope = module.kv.vault.id
     }
   }
-  depends_on = [module.rg]
 }
 ```
 
@@ -112,7 +110,6 @@ module "acr" {
       }
     }
   }
-  depends_on = [module.rg, module.kv]
 }
 ````
 
@@ -129,6 +126,7 @@ module "acr" {
 | [azurerm_container_registry_token](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/container_registry_token) | resource |
 | [azurerm_container_registry_token_password](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/container_registry_token_password) | resource |
 | [azurerm_key_vault_secret](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_secret) | resource |
+| [azurerm_container_registry_agent_pool](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/container_registry_agent_pool) | resource |
 
 ## Inputs
 
