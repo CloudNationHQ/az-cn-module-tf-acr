@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.4.0](https://github.com/CloudNationHQ/az-cn-module-tf-acr/compare/v0.3.0...v0.4.0) (2023-07-28)
+
+
+### Features
+
+* add agentpool support ([#14](https://github.com/CloudNationHQ/az-cn-module-tf-acr/issues/14)) ([140acb6](https://github.com/CloudNationHQ/az-cn-module-tf-acr/commit/140acb68202363a6406206a45d77414e98ee2c8d))
+* add agentpool tasks and private link support ([#15](https://github.com/CloudNationHQ/az-cn-module-tf-acr/issues/15)) ([a6a77fd](https://github.com/CloudNationHQ/az-cn-module-tf-acr/commit/a6a77fde73667ecb69a7aa436476fba3f19056d6))
+* **deps:** bump github.com/gruntwork-io/terratest in /tests ([#13](https://github.com/CloudNationHQ/az-cn-module-tf-acr/issues/13)) ([1e2dfad](https://github.com/CloudNationHQ/az-cn-module-tf-acr/commit/1e2dfad0cf04f975955443b3bb290300bb7f339f))
+* **deps:** bump github.com/gruntwork-io/terratest in /tests ([#9](https://github.com/CloudNationHQ/az-cn-module-tf-acr/issues/9)) ([d7932e2](https://github.com/CloudNationHQ/az-cn-module-tf-acr/commit/d7932e27d616bcd0c93e529071a24f8b4f133678))
+* **deps:** bump google.golang.org/grpc from 1.51.0 to 1.53.0 in /tests ([#10](https://github.com/CloudNationHQ/az-cn-module-tf-acr/issues/10)) ([5465c71](https://github.com/CloudNationHQ/az-cn-module-tf-acr/commit/5465c71f94e6a34c6b140976742519e53eed473b))
+
 ## [0.3.0](https://github.com/CloudNationHQ/az-cn-module-tf-acr/compare/v0.2.0...v0.3.0) (2023-06-29)
 
 
