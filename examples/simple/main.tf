@@ -25,5 +25,4 @@ module "acr" {
     resourcegroup = module.rg.groups.demo.name
     sku           = "Premium"
   }
-  depends_on = [module.rg]
 }

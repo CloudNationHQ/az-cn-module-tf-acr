@@ -30,7 +30,6 @@ module "kv" {
       }
     }
   }
-  depends_on = [module.rg]
 }
 
 module "acr" {
@@ -55,6 +54,4 @@ module "acr" {
       }
     }
   }
-
-  depends_on = [module.rg, module.kv]
 }
