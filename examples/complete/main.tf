@@ -55,7 +55,7 @@ module "acr" {
 
   registry = {
     location      = module.rg.groups.demo.location
-    resourcegroup = module.rg.group.demo.name
+    resourcegroup = module.rg.groups.demo.name
     vault         = module.kv.vault.id
     sku           = "Premium"
 
