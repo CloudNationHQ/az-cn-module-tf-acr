@@ -52,7 +52,7 @@ module "acr" {
 
       dns_zone = {
         resourcegroup = "rg-network-shared-001"
-        subscription  = "6b6b6146-591c-4251-855a-024df2efde45"
+        subscription  = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
       }
     }
 
