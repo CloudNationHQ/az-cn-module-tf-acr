@@ -2,13 +2,18 @@ provider "azurerm" {
   features {}
 }
 
+module "naming" {
+  source = "github.com/cloudnationhq/az-cn-module-tf-naming"
+
+  suffix = ["demo", "dev"]
+}
+
 module "rg" {
   source = "github.com/cloudnationhq/az-cn-module-tf-rg"
 
-  environment = var.environment
-
   groups = {
     demo = {
+      name   = module.naming.resource_group.name
       region = "westeurope"
     }
   }
@@ -17,13 +22,11 @@ module "rg" {
 module "acr" {
   source = "../../"
 
-  workload    = var.workload
-  environment = var.environment
-
   registry = {
-    location      = module.rg.groups.demo.location
-    resourcegroup = module.rg.groups.demo.name
-    sku           = "Premium"
+    name                  = module.naming.container_registry.name_unique
+    location              = module.rg.groups.demo.location
+    resourcegroup         = module.rg.groups.demo.name
+    sku                   = "Premium"
 
     replications = {
       sea  = { location = "southeastasia" }

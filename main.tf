@@ -1,3 +1,13 @@
+provider "azurerm" {
+  features {}
+}
+
+provider "azurerm" {
+  alias           = "connectivity"
+  subscription_id = try(var.registry.private_link.subscription, null)
+  features {}
+}
+
 # generate random id
 resource "random_string" "random" {
   length    = 3
@@ -11,7 +21,7 @@ resource "random_string" "random" {
 resource "azurerm_user_assigned_identity" "mi" {
   for_each = try(var.registry.encryption.enable, false) == true ? { "mi" : true } : {}
 
-  name                = "mi-encr-${var.workload}-${var.environment}"
+  name                = "mi-encr-weetniet"
   resource_group_name = var.registry.resourcegroup
   location            = var.registry.location
 }
@@ -27,7 +37,7 @@ resource "azurerm_role_assignment" "rol" {
 
 # container registry
 resource "azurerm_container_registry" "acr" {
-  name                = "acr${var.workload}${var.environment}${random_string.random.result}"
+  name                = var.registry.name
   resource_group_name = var.registry.resourcegroup
   location            = var.registry.location
 
@@ -229,29 +239,33 @@ resource "azurerm_container_registry_task" "tasks" {
 }
 
 # dns zone
-resource "azurerm_private_dns_zone" "zone" {
-  for_each = contains(keys(var.registry), "private_link") ? { "default" = var.registry.private_link } : {}
+data "azurerm_private_dns_zone" "zone" {
+  provider = azurerm.connectivity
+
+  for_each = contains(keys(var.registry), "private_link") && contains(keys(var.registry), "private_link") ? { "default" = var.registry.private_link } : {}
 
   name                = "privatelink.azurecr.io"
-  resource_group_name = var.registry.resourcegroup
+  resource_group_name = var.registry.private_link.resourcegroup
 }
 
 # network link
 resource "azurerm_private_dns_zone_virtual_network_link" "link" {
-  for_each = contains(keys(var.registry), "private_link") ? { "default" = var.registry.private_link } : {}
+  provider = azurerm.connectivity
+
+  for_each = contains(keys(var.registry), "private_link") && contains(keys(var.registry), "private_link") ? { "default" = var.registry.private_link } : {}
 
   name                  = "link${random_string.random.result}"
-  resource_group_name   = var.registry.resourcegroup
-  private_dns_zone_name = azurerm_private_dns_zone.zone[each.key].name
+  resource_group_name   = var.registry.private_link.resourcegroup
+  private_dns_zone_name = data.azurerm_private_dns_zone.zone[each.key].name
   virtual_network_id    = var.registry.private_link.vnet
   registration_enabled  = true
 }
 
 # private endpoint
 resource "azurerm_private_endpoint" "endpoint" {
-  for_each = contains(keys(var.registry), "private_link") ? { "default" = var.registry.private_link } : {}
+  for_each = contains(keys(var.registry), "private_link") && contains(keys(var.registry), "private_link") ? { "default" = var.registry.private_link } : {}
 
-  name                = "pep-${var.workload}-${var.environment}"
+  name                = "pep-weetniet"
   location            = var.registry.location
   resource_group_name = var.registry.resourcegroup
   subnet_id           = var.registry.private_link.subnet
@@ -265,6 +279,6 @@ resource "azurerm_private_endpoint" "endpoint" {
 
   private_dns_zone_group {
     name                 = "default"
-    private_dns_zone_ids = [azurerm_private_dns_zone.zone[each.key].id]
+    private_dns_zone_ids = [data.azurerm_private_dns_zone.zone[each.key].id]
   }
 }
