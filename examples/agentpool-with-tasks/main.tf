@@ -49,10 +49,11 @@ module "acr" {
     sku           = "Premium"
 
     private_endpoint = {
-      vnet          = module.network.vnet.id
-      subnet        = module.network.subnets.plink.id
-      subscription  = local.private_dns_zones.subscription
-      resourcegroup = local.private_dns_zones.resourcegroup
+      vnet                     = module.network.vnet.id
+      subnet                   = module.network.subnets.plink.id
+      subscription             = local.centralized_dns_zone.subscription
+      resourcegroup            = local.centralized_dns_zone.resourcegroup
+      use_centralized_dns_zone = true
     }
 
     agentpools = {
