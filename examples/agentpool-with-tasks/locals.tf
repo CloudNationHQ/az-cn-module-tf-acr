@@ -9,8 +9,8 @@ locals {
 
 locals {
   # aliased subscription private dns zones
-  private_dns_zones = {
-    subscription  = "55536141-531c-4231-835a-024d32efd345"
+  centralized_dns_zone = {
+    subscription  = "6b6b6146-591c-4251-855a-024df2efde45"
     resourcegroup = "rg-network-shared-001"
   }
 }
