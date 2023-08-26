@@ -219,7 +219,7 @@ Each of these tests contributes to the robustness and resilience of the module. 
 
 ## Notes
 
-For the agent pool task, a personal access token with the repo scope is required
+For agent pool tasks, a personal access token with the repo scope is required
 
 The configuration is aligned with enterprise-scale principles, favoring centralized private dns zones in combination with private endpoints. Nonetheless, decentralization remains an option.
 
