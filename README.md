@@ -20,7 +20,7 @@ A last key goal is to separate logic from configuration in the module, thereby e
 - utilization of terratest for robust validation.
 - supports enhanced scalability and isolation through dedicated agent pools
 - flexibility to deploy multiple tasks using agent pools
-- private link for secure network connections
+- private endpoint support using either centralized or decentralized private DNS zones
 
 The below examples shows the usage when consuming the module:
 
@@ -149,7 +149,7 @@ module "acr" {
 }
 ```
 
-## Usage: private link without centralized dns zone
+## Usage: private endpoint
 
 ```hcl
 module "acr" {
