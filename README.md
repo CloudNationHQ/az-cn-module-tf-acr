@@ -219,17 +219,13 @@ Each of these tests contributes to the robustness and resilience of the module. 
 
 ## Notes
 
-For the agent pool task, a personal access token with the repo scope is required
+for the agent pool task, a personal access token with the repo scope is required
 
-## Notes
+this configuration follows enterprise-scale principles for private link centralized private DNS zones
 
-- for the agent pool task, a personal access token with the repo scope is required
+naming convention of resources have been established to support the right abbreviations, regular expressions using a dedicated module
 
-- this configuration follows enterprise-scale principles for private link centralized private DNS zones
-
-- naming convention of resources have been established to support the right abbreviations, regular expressions using a dedicated module
-
-- comprehensive examples covering all usages can be found in the example directory
+comprehensive examples covering all usages can be found in the example directory
 
 
 ## Authors
