@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.0](https://github.com/CloudNationHQ/az-cn-module-tf-acr/compare/v0.4.0...v0.5.0) (2023-08-26)
+
+
+### Features
+
+* add consistent naming and added the ability to enable private link using a existing private dns zone in another subscription ([#18](https://github.com/CloudNationHQ/az-cn-module-tf-acr/issues/18)) ([ce068e0](https://github.com/CloudNationHQ/az-cn-module-tf-acr/commit/ce068e01085f727e79de82b47bd5f5a2fbbb751c))
+* **deps:** bump github.com/gruntwork-io/terratest in /tests ([#17](https://github.com/CloudNationHQ/az-cn-module-tf-acr/issues/17)) ([2655555](https://github.com/CloudNationHQ/az-cn-module-tf-acr/commit/2655555c4cac855682e8ba18208f91f931e503e0))
+
 ## [0.4.0](https://github.com/CloudNationHQ/az-cn-module-tf-acr/compare/v0.3.0...v0.4.0) (2023-07-28)
 
 
