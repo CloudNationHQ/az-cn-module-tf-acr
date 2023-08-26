@@ -2,13 +2,19 @@ provider "azurerm" {
   features {}
 }
 
+
+module "naming" {
+  source = "github.com/cloudnationhq/az-cn-module-tf-naming"
+
+  suffix = ["demo", "dev"]
+}
+
 module "rg" {
   source = "github.com/cloudnationhq/az-cn-module-tf-rg"
 
-  environment = var.environment
-
   groups = {
     demo = {
+      name   = module.naming.resource_group.name
       region = "westeurope"
     }
   }
@@ -17,16 +23,16 @@ module "rg" {
 module "network" {
   source = "github.com/cloudnationhq/az-cn-module-tf-vnet"
 
-  workload    = var.workload
-  environment = var.environment
+  naming = local.naming
 
   vnet = {
+    name          = module.naming.virtual_network.name
     location      = module.rg.groups.demo.location
     resourcegroup = module.rg.groups.demo.name
-    cidr          = ["10.18.0.0/16"]
+    cidr          = ["10.25.0.0/16"]
     subnets = {
-      demo  = { cidr = ["10.18.1.0/24"] }
-      plink = { cidr = ["10.18.2.0/24"] }
+      demo  = { cidr = ["10.25.1.0/24"] }
+      plink = { cidr = ["10.25.2.0/24"] }
     }
   }
 }
@@ -34,17 +40,19 @@ module "network" {
 module "acr" {
   source = "../../"
 
-  workload    = var.workload
-  environment = var.environment
+  naming = local.naming
 
   registry = {
+    name          = module.naming.container_registry.name_unique
     location      = module.rg.groups.demo.location
     resourcegroup = module.rg.groups.demo.name
     sku           = "Premium"
 
-    private_link = {
-      vnet   = module.network.vnet.id
-      subnet = module.network.subnets.plink.id
+    private_endpoint = {
+      vnet          = module.network.vnet.id
+      subnet        = module.network.subnets.plink.id
+      subscription  = local.private_dns_zones.subscription
+      resourcegroup = local.private_dns_zones.resourcegroup
     }
 
     agentpools = {
@@ -65,4 +73,3 @@ module "acr" {
     }
   }
 }
-

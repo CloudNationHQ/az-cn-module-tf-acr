@@ -2,9 +2,12 @@ variable "registry" {
   type = any
 }
 
-variable "workload" {
-  type = string
+variable "naming" {
+  type    = map(string)
+  default = {}
 }
-variable "environment" {
-  type = string
-}
+
+//variable "use_aliased_provider" {
+//  description = "Flag to determine if aliased provider should be used"
+//  type        = bool
+//}
