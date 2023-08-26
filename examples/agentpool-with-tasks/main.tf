@@ -40,20 +40,19 @@ module "network" {
 module "acr" {
   source = "../../"
 
+  naming = local.naming
+
   registry = {
     name          = module.naming.container_registry.name_unique
     location      = module.rg.groups.demo.location
     resourcegroup = module.rg.groups.demo.name
     sku           = "Premium"
 
-    private_link = {
-      vnet   = module.network.vnet.id
-      subnet = module.network.subnets.plink.id
-
-      dns_zone = {
-        resourcegroup = "rg-network-shared-001"
-        subscription  = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-      }
+    private_endpoint = {
+      vnet          = module.network.vnet.id
+      subnet        = module.network.subnets.plink.id
+      subscription  = local.private_dns_zones.subscription
+      resourcegroup = local.private_dns_zones.resourcegroup
     }
 
     agentpools = {

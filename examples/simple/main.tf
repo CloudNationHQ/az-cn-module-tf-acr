@@ -22,8 +22,6 @@ module "rg" {
 module "acr" {
   source = "../../"
 
-  naming = local.naming
-
   registry = {
     name          = module.naming.container_registry.name_unique
     location      = module.rg.groups.demo.location
