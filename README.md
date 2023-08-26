@@ -107,7 +107,7 @@ module "acr" {
 }
 ````
 
-## Usage: agent pool tasks using centralized dns zone
+## Usage: agent pool tasks
 
 ```hcl
 module "acr" {
