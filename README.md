@@ -225,7 +225,7 @@ This configuration follows enterprise-scale principles for private link centrali
 
 Naming convention of resources have been established to support the right abbreviations, regular expressions using a dedicated module
 
-Comprehensive examples covering all usages can be found in the example directory
+Comprehensive examples covering all usages can be found in the examples directory
 
 
 ## Authors
