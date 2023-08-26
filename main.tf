@@ -243,14 +243,21 @@ resource "azurerm_container_registry_task" "tasks" {
 data "azurerm_private_dns_zone" "zone" {
   provider = azurerm.connectivity
 
-  for_each = (contains(keys(var.registry), "private_endpoint") && var.registry.private_endpoint.use_centralized_dns_zone == true) ? { "default" = var.registry.private_endpoint } : {}
+  for_each = (
+    contains(keys(var.registry), "private_endpoint") &&
+    try(var.registry.private_endpoint.use_centralized_dns_zone, null) == true
+  ) ? { "default" = var.registry.private_endpoint } : {}
 
   name                = "privatelink.azurecr.io"
   resource_group_name = var.registry.private_endpoint.resourcegroup
 }
 
 resource "azurerm_private_dns_zone" "zone" {
-  for_each = (contains(keys(var.registry), "private_endpoint") && var.registry.private_endpoint.use_centralized_dns_zone == false) ? { "default" = var.registry.private_endpoint } : {}
+
+  for_each = (
+    contains(keys(var.registry), "private_endpoint") &&
+    try(var.registry.private_endpoint.use_centralized_dns_zone, null) == true
+  ) ? { "default" = var.registry.private_endpoint } : {}
 
   name                = "privatelink.azurecr.io"
   resource_group_name = var.registry.resourcegroup
@@ -260,7 +267,10 @@ resource "azurerm_private_dns_zone" "zone" {
 resource "azurerm_private_dns_zone_virtual_network_link" "link" {
   provider = azurerm.connectivity
 
-  for_each = contains(keys(var.registry), "private_endpoint") ? { "default" = var.registry.private_endpoint } : {}
+  for_each = (
+    contains(keys(var.registry), "private_endpoint")
+  ) ? { "default" = var.registry.private_endpoint } : {}
+
 
   name                  = "link${random_string.random.result}"
   resource_group_name   = var.registry.private_endpoint.use_centralized_dns_zone ? var.registry.private_endpoint.resourcegroup : var.registry.resourcegroup
@@ -272,7 +282,10 @@ resource "azurerm_private_dns_zone_virtual_network_link" "link" {
 
 # private endpoint
 resource "azurerm_private_endpoint" "endpoint" {
-  for_each = contains(keys(var.registry), "private_endpoint") ? { "default" = var.registry.private_endpoint } : {}
+
+  for_each = (
+    contains(keys(var.registry), "private_endpoint")
+  ) ? { "default" = var.registry.private_endpoint } : {}
 
   name                = join("-", [var.naming.private_endpoint, "acr"])
   location            = var.registry.location
