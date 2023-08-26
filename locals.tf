@@ -19,21 +19,21 @@ locals {
       actions      = m.actions
       token_name   = "token-${maps_key}"
       token_expiry = try(m.token_expiry, null)
-      secret_name  = "secret-${maps_key}"
+      secret_name  = "${var.naming.key_vault_secret}-${maps_key}"
       key_vault_id = try(var.registry.vault, null)
     }
   ])
 }
 
 locals {
-  pools = {
-    for pool_key, pool in try(var.registry.agentpools, {}) : pool_key => {
+  pools = contains(keys(var.registry), "agentpools") ? {
+    for pool_key, pool in var.registry.agentpools : pool_key => {
       name           = pool_key
       instance_count = try(pool.instances, 1)
       tier           = try(pool.tier, "S2")
       tasks          = try(pool.tasks, {})
     }
-  }
+  } : {}
 
   tasks = flatten([
     for pool_key, pool in local.pools : [

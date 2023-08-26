@@ -30,10 +30,8 @@ The below examples shows the usage when consuming the module:
 module "acr" {
   source = "github.com/cloudnationhq/az-cn-module-tf-acr"
 
-  workload       = var.workload
-  environment    = var.environment
-
   registry = {
+    name          = module.naming.container_registry.name_unique
     location      = module.rg.groups.demo.location
     resourcegroup = module.rg.groups.demo.name
     sku           = "Premium"
@@ -47,13 +45,11 @@ module "acr" {
 module "acr" {
   source = "github.com/cloudnationhq/az-cn-module-tf-acr"
 
-  workload       = var.workload
-  environment    = var.environment
-
   registry = {
-    location            = module.rg.groups.demo.location
-    resourcegroup       = module.rg.groups.demo.name
-    sku                 = "Premium"
+    name          = module.naming.container_registry.name_unique
+    location      = module.rg.groups.demo.location
+    resourcegroup = module.rg.groups.demo.name
+    sku           = "Premium"
 
     replications = {
       sea  = { location = "southeastasia" }
@@ -70,10 +66,8 @@ module "acr" {
 module "acr" {
   source = "github.com/cloudnationhq/az-cn-module-tf-acr"
 
-  workload       = var.workload
-  environment    = var.environment
-
   registry = {
+    name          = module.naming.container_registry.name_unique
     location      = module.rg.groups.demo.location
     resourcegroup = module.rg.groups.demo.name
     sku           = "Premium"
@@ -93,10 +87,8 @@ module "acr" {
 module "acr" {
   source = "github.com/cloudnationhq/az-cn-module-tf-acr"
 
-  workload       = var.workload
-  environment    = var.environment
-
   registry = {
+    name          = module.naming.container_registry.name_unique
     location      = module.rg.groups.demo.location
     resourcegroup = module.rg.groups.demo.name
     vault         = module.kv.vault.id
@@ -121,17 +113,19 @@ module "acr" {
 module "acr" {
   source = "github.com/cloudnationhq/az-cn-module-tf-acr"
 
-  workload    = var.workload
-  environment = var.environment
+  naming = local.naming
 
   registry = {
+    name          = module.naming.container_registry.name_unique
     location      = module.rg.groups.demo.location
     resourcegroup = module.rg.groups.demo.name
     sku           = "Premium"
 
-    private_link = {
-      vnet   = module.network.vnet.id
-      subnet = module.network.subnets.plink.id
+    private_endpoint = {
+      vnet          = module.network.vnet.id
+      subnet        = module.network.subnets.plink.id
+      subscription  = local.private_dns_zones.subscription
+      resourcegroup = local.private_dns_zones.resourcegroup
     }
 
     agentpools = {
@@ -142,7 +136,7 @@ module "acr" {
           demo1 = {
             access_token    = var.pat
             repository_url  = "https://github.com/cloudnationhq/az-cn-module-tf-acr.git"
-            context_path    = "https://github.com/cloudnationhq/az-cn-module-tf-acr.git#main"
+            context_path    = "https://github.com/cloudnationhq/az-cn-module-tf-acr#main"
             dockerfile_path = ".azdo/Dockerfile"
             image_names     = ["azdoagent:latest"]
             source_events   = ["commit"]
@@ -160,17 +154,19 @@ module "acr" {
 module "acr" {
   source = "github.com/cloudnationhq/az-cn-module-tf-acr"
 
-  workload    = var.workload
-  environment = var.environment
+  naming = local.naming
 
   registry = {
+    name          = module.naming.container_registry.name_unique
     location      = module.rg.groups.demo.location
     resourcegroup = module.rg.groups.demo.name
     sku           = "Premium"
 
-    private_link = {
-      vnet   = module.network.vnet.id
-      subnet = module.network.subnets.plink.id
+    private_endpoint = {
+      vnet          = module.network.vnet.id
+      subnet        = module.network.subnets.plink.id
+      subscription  = local.private_dns_zones.subscription
+      resourcegroup = local.private_dns_zones.resourcegroup
     }
   }
 }
@@ -191,7 +187,6 @@ module "acr" {
 | [azurerm_key_vault_secret](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_secret) | resource |
 | [azurerm_container_registry_agent_pool](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/container_registry_agent_pool) | resource |
 | [azurerm_container_registry_task](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/container_registry_task) | resource |
-| [azurerm_private_dns_zone](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_zone) | resource |
 | [azurerm_private_dns_zone_virtual_network_link](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_zone_virtual_network_link) | resource |
 | [azurerm_private_endpoint](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint) | resource |
 
@@ -200,8 +195,7 @@ module "acr" {
 | Name | Description | Type | Required |
 | :-- | :-- | :-- | :-- |
 | `registry` | describes container registry related configuration | object | yes |
-| `workload` | contains the workload name used, for naming convention	| string | yes |
-| `environment` | contains shortname of the environment used for naming convention	| string | yes |
+| `naming` | contains the naming convention	| string | yes |
 
 ## Outputs
 
