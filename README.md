@@ -227,13 +227,13 @@ Each of these tests contributes to the robustness and resilience of the module. 
 
 For agent pool tasks, a personal access token with the repo scope is required
 
-The configuration is aligned with enterprise-scale principles, favoring centralized private dns zones in combination with private endpoints. Nonetheless, there is still the option to create a decentralized private dns zone.
+The configuration is aligned with enterprise-scale principles, favoring centralized private dns zones in combination with private endpoints. Nonetheless, there is still the option to create a decentralized one
 
 Using a dedicated module, we've developed a naming convention for resources that's based on specific regular expressions for each type, ensuring correct abbreviations and offering flexibility with multiple prefixes and suffixes
 
-Naming convention of resources have been established to support the right abbreviations, regular expressions using a dedicated module. It supports multiple prefixes and suffixes as well to make it more flexible.
+Naming convention of resources have been established to support the right abbreviations, regular expressions using a dedicated module. It supports multiple prefixes and suffixes as well to make it more flexible
 
-Full examples detailing all usages, along with integrations with dependency modules, are located in the examples directory.
+Full examples detailing all usages, along with integrations with dependency modules, are located in the examples directory
 
 ## Authors
 
