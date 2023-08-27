@@ -190,6 +190,12 @@ module "acr" {
 | [azurerm_private_dns_zone_virtual_network_link](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_zone_virtual_network_link) | resource |
 | [azurerm_private_endpoint](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint) | resource |
 
+## Data Sources
+
+| Name | Type |
+| :-- | :-- |
+| [azurerm_private_dns_zone](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/private_dns_zone) | datasource |
+
 ## Inputs
 
 | Name | Description | Type | Required |
@@ -221,7 +227,9 @@ Each of these tests contributes to the robustness and resilience of the module. 
 
 For agent pool tasks, a personal access token with the repo scope is required
 
-The configuration is aligned with enterprise-scale principles, favoring centralized private dns zones in combination with private endpoints. Nonetheless, decentralization remains an option.
+The configuration is aligned with enterprise-scale principles, favoring centralized private dns zones in combination with private endpoints. Nonetheless, there is still the option to create a decentralized private dns zone.
+
+Using a dedicated module, we've developed a naming convention for resources that's based on specific regular expressions for each type, ensuring correct abbreviations and offering flexibility with multiple prefixes and suffixes
 
 Naming convention of resources have been established to support the right abbreviations, regular expressions using a dedicated module. It supports multiple prefixes and suffixes as well to make it more flexible.
 
