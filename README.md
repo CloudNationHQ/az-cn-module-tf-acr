@@ -231,8 +231,6 @@ The configuration is aligned with enterprise-scale principles, favoring centrali
 
 Using a dedicated module, we've developed a naming convention for resources that's based on specific regular expressions for each type, ensuring correct abbreviations and offering flexibility with multiple prefixes and suffixes
 
-Naming convention of resources have been established to support the right abbreviations, regular expressions using a dedicated module. It supports multiple prefixes and suffixes as well to make it more flexible
-
 Full examples detailing all usages, along with integrations with dependency modules, are located in the examples directory
 
 ## Authors
