@@ -2,7 +2,6 @@ provider "azurerm" {
   features {}
 }
 
-
 module "naming" {
   source = "github.com/cloudnationhq/az-cn-module-tf-naming"
 
@@ -31,8 +30,7 @@ module "network" {
     resourcegroup = module.rg.groups.demo.name
     cidr          = ["10.25.0.0/16"]
     subnets = {
-      demo  = { cidr = ["10.25.1.0/24"] }
-      plink = { cidr = ["10.25.2.0/24"] }
+      demo = { cidr = ["10.25.1.0/24"] }
     }
   }
 }
@@ -48,20 +46,12 @@ module "acr" {
     resourcegroup = module.rg.groups.demo.name
     sku           = "Premium"
 
-    private_endpoint = {
-      vnet                     = module.network.vnet.id
-      subnet                   = module.network.subnets.plink.id
-      subscription             = local.centralized_dns_zone.subscription
-      resourcegroup            = local.centralized_dns_zone.resourcegroup
-      use_centralized_dns_zone = true
-    }
-
     agentpools = {
       demo = {
         instances = 2
         subnet    = module.network.subnets.demo.id
         tasks = {
-          demo1 = {
+          image = {
             access_token    = var.pat
             repository_url  = "https://github.com/cloudnationhq/az-cn-module-tf-acr.git"
             context_path    = "https://github.com/cloudnationhq/az-cn-module-tf-acr#main"

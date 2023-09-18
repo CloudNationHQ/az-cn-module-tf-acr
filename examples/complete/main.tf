@@ -44,7 +44,7 @@ module "kv" {
   }
 }
 
-module "acr" {
+module "registry" {
   source = "../../"
 
   naming = local.naming
@@ -55,10 +55,6 @@ module "acr" {
     resourcegroup = module.rg.groups.demo.name
     vault         = module.kv.vault.id
     sku           = "Premium"
-
-    enable = {
-      user_assigned_identity = false
-    }
 
     scope_maps = {
       prod = {

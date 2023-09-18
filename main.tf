@@ -1,21 +1,4 @@
-provider "azurerm" {
-  features {}
-}
-
-provider "azurerm" {
-  alias           = "connectivity"
-  subscription_id = try(var.registry.private_endpoint.subscription, null)
-  features {}
-}
-
-# generate random id
-resource "random_string" "random" {
-  length    = 3
-  min_lower = 3
-  special   = false
-  numeric   = false
-  upper     = false
-}
+data "azurerm_subscription" "current" {}
 
 # user managed identity
 resource "azurerm_user_assigned_identity" "mi" {
@@ -236,58 +219,5 @@ resource "azurerm_container_registry_task" "tasks" {
       token_type = "PAT"
       token      = each.value.access_token
     }
-  }
-}
-
-# dns zone
-data "azurerm_private_dns_zone" "zone" {
-  provider = azurerm.connectivity
-
-  for_each = (contains(keys(var.registry), "private_endpoint") && try(var.registry.private_endpoint.use_centralized_dns_zone, null) == true) ? { "default" = var.registry.private_endpoint } : {}
-
-  name                = "privatelink.azurecr.io"
-  resource_group_name = var.registry.private_endpoint.resourcegroup
-}
-
-resource "azurerm_private_dns_zone" "zone" {
-  for_each = (contains(keys(var.registry), "private_endpoint") && try(var.registry.private_endpoint.use_centralized_dns_zone, null) == false) ? { "default" = var.registry.private_endpoint } : {}
-
-  name                = "privatelink.azurecr.io"
-  resource_group_name = var.registry.resourcegroup
-}
-
-# network link
-resource "azurerm_private_dns_zone_virtual_network_link" "link" {
-  provider = azurerm.connectivity
-
-  for_each = contains(keys(var.registry), "private_endpoint") ? { "default" = var.registry.private_endpoint } : {}
-
-  name                  = "link${random_string.random.result}"
-  resource_group_name   = var.registry.private_endpoint.use_centralized_dns_zone ? var.registry.private_endpoint.resourcegroup : var.registry.resourcegroup
-  private_dns_zone_name = var.registry.private_endpoint.use_centralized_dns_zone ? data.azurerm_private_dns_zone.zone[each.key].name : azurerm_private_dns_zone.zone[each.key].name
-
-  virtual_network_id   = var.registry.private_endpoint.vnet
-  registration_enabled = true
-}
-
-# private endpoint
-resource "azurerm_private_endpoint" "endpoint" {
-  for_each = contains(keys(var.registry), "private_endpoint") ? { "default" = var.registry.private_endpoint } : {}
-
-  name                = join("-", [var.naming.private_endpoint, "acr"])
-  location            = var.registry.location
-  resource_group_name = var.registry.resourcegroup
-  subnet_id           = var.registry.private_endpoint.subnet
-
-  private_service_connection {
-    name                           = "endpoint"
-    is_manual_connection           = false
-    private_connection_resource_id = azurerm_container_registry.acr.id
-    subresource_names              = ["registry"]
-  }
-
-  private_dns_zone_group {
-    name                 = "default"
-    private_dns_zone_ids = var.registry.private_endpoint.use_centralized_dns_zone ? [data.azurerm_private_dns_zone.zone[each.key].id] : [azurerm_private_dns_zone.zone[each.key].id]
   }
 }
