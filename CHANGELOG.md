@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.6.0](https://github.com/CloudNationHQ/az-cn-module-tf-acr/compare/v0.5.0...v0.6.0) (2023-09-18)
+
+
+### Features
+
+* add extended tests ([#23](https://github.com/CloudNationHQ/az-cn-module-tf-acr/issues/23)) ([e888fe9](https://github.com/CloudNationHQ/az-cn-module-tf-acr/commit/e888fe9053deeff27f18c525d66f8ace6f57eb12))
+* **deps:** Bump github.com/gruntwork-io/terratest from 0.43.12 to 0.43.13 in /tests ([#22](https://github.com/CloudNationHQ/az-cn-module-tf-acr/issues/22)) ([c05ee4d](https://github.com/CloudNationHQ/az-cn-module-tf-acr/commit/c05ee4d36925a1a9b623f878b56ca57be4ccd858))
+* update documentation and small refactor ([#20](https://github.com/CloudNationHQ/az-cn-module-tf-acr/issues/20)) ([e6347db](https://github.com/CloudNationHQ/az-cn-module-tf-acr/commit/e6347db0e428024fe156accd3781a4483745871b))
+
 ## [0.5.0](https://github.com/CloudNationHQ/az-cn-module-tf-acr/compare/v0.4.0...v0.5.0) (2023-08-26)
 
 
