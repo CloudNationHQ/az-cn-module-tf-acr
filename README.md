@@ -20,7 +20,6 @@ A last key goal is to separate logic from configuration in the module, thereby e
 - utilization of terratest for robust validation.
 - supports enhanced scalability and isolation through dedicated agent pools
 - flexibility to deploy multiple tasks using agent pools
-- private endpoint support using either centralized or decentralized private DNS zones
 
 The below examples shows the usage when consuming the module:
 
@@ -121,20 +120,12 @@ module "acr" {
     resourcegroup = module.rg.groups.demo.name
     sku           = "Premium"
 
-    private_endpoint = {
-      vnet                     = module.network.vnet.id
-      subnet                   = module.network.subnets.plink.id
-      subscription             = local.centralized_dns_zone.subscription
-      resourcegroup            = local.centralized_dns_zone.resourcegroup
-      use_centralized_dns_zone = true
-    }
-
     agentpools = {
       demo = {
         instances = 2
         subnet    = module.network.subnets.demo.id
         tasks = {
-          demo1 = {
+          image = {
             access_token    = var.pat
             repository_url  = "https://github.com/cloudnationhq/az-cn-module-tf-acr.git"
             context_path    = "https://github.com/cloudnationhq/az-cn-module-tf-acr#main"
@@ -144,29 +135,6 @@ module "acr" {
           }
         }
       }
-    }
-  }
-}
-```
-
-## Usage: private endpoint
-
-```hcl
-module "acr" {
-  source = "github.com/cloudnationhq/az-cn-module-tf-acr"
-
-  naming = local.naming
-
-  registry = {
-    name          = module.naming.container_registry.name_unique
-    location      = module.rg.groups.demo.location
-    resourcegroup = module.rg.groups.demo.name
-    sku           = "Premium"
-
-    private_endpoint = {
-      vnet                     = module.network.vnet.id
-      subnet                   = module.network.subnets.plink.id
-      use_centralized_dns_zone = false
     }
   }
 }
@@ -187,15 +155,6 @@ module "acr" {
 | [azurerm_key_vault_secret](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_secret) | resource |
 | [azurerm_container_registry_agent_pool](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/container_registry_agent_pool) | resource |
 | [azurerm_container_registry_task](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/container_registry_task) | resource |
-| [azurerm_private_dns_zone_virtual_network_link](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_zone_virtual_network_link) | resource |
-| [azurerm_private_endpoint](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint) | resource |
-| [azurerm_private_dns_zone](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_zone) | resource |
-
-## Data Sources
-
-| Name | Type |
-| :-- | :-- |
-| [azurerm_private_dns_zone](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/private_dns_zone) | datasource |
 
 ## Inputs
 
@@ -209,6 +168,7 @@ module "acr" {
 | Name | Description |
 | :-- | :-- |
 | `acr` | contains all container registry config |
+| `subscriptionId` | contains the id of the current subscription |
 
 ## Testing
 
@@ -227,8 +187,6 @@ Each of these tests contributes to the robustness and resilience of the module. 
 ## Notes
 
 For agent pool tasks, a personal access token with the repo scope is required
-
-The configuration is aligned with enterprise-scale principles, favoring centralized private dns zones in combination with private endpoints. Nonetheless, there is still the option to create a decentralized one
 
 Using a dedicated module, we've developed a naming convention for resources that's based on specific regular expressions for each type, ensuring correct abbreviations and offering flexibility with multiple prefixes and suffixes
 
