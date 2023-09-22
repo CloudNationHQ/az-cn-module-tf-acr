@@ -68,7 +68,7 @@ module "registry" {
 
     encryption = {
       enable                = true
-      kv_key_id             = module.kv.kv_keys.demo.id
+      kv_key_id             = module.kv.keys.demo.id
       role_assignment_scope = module.kv.vault.id
     }
 
