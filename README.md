@@ -219,6 +219,7 @@ module "private_dns" {
 - [container registry using replication across different geolocations ](https://github.com/cloudnationhq/az-cn-module-tf-acr/tree/main/examples/replications/main.tf)
 - [container registry access control using scope maps](https://github.com/cloudnationhq/az-cn-module-tf-acr/tree/main/examples/scope-maps/main.tf)
 - [container registry with dedicated agent pools using tasks](https://github.com/cloudnationhq/az-cn-module-tf-acr/tree/main/examples/agentpool-with-tasks/main.tf)
+- [container registry using private endpoint](https://github.com/cloudnationhq/az-cn-module-tf-acr/tree/main/examples/private-endpoint/main.tf)
 
 ## Testing
 
