@@ -18,10 +18,7 @@ module "rg" {
 module "acr" {
   source = "../../"
 
-  registry = {
-    name          = module.naming.container_registry.name_unique
-    location      = module.rg.groups.demo.location
-    resourcegroup = module.rg.groups.demo.name
-    sku           = "Premium"
-  }
+  for_each = local.registries
+
+  registry = each.value
 }
