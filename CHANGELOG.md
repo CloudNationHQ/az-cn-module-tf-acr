@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.7.0](https://github.com/CloudNationHQ/az-cn-module-tf-acr/compare/v0.6.0...v0.7.0) (2023-10-17)
+
+
+### Features
+
+* add private link support and private dns sub module ([#33](https://github.com/CloudNationHQ/az-cn-module-tf-acr/issues/33)) ([5f3573e](https://github.com/CloudNationHQ/az-cn-module-tf-acr/commit/5f3573e41bee47b77b03866d1c0304e720d4da52))
+* cleanup redundant provider blocks in example usages ([#32](https://github.com/CloudNationHQ/az-cn-module-tf-acr/issues/32)) ([f42a62b](https://github.com/CloudNationHQ/az-cn-module-tf-acr/commit/f42a62bea4fce182e36a89cc12ee31868480ecd3))
+* **deps:** Bump github.com/Azure/azure-sdk-for-go/sdk/azidentity in /tests ([#31](https://github.com/CloudNationHQ/az-cn-module-tf-acr/issues/31)) ([4ba8029](https://github.com/CloudNationHQ/az-cn-module-tf-acr/commit/4ba8029fd60da5f62f97700569e8fa6d3f2ba094))
+* **deps:** bump github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/containerregistry/armcontainerregistry ([#28](https://github.com/CloudNationHQ/az-cn-module-tf-acr/issues/28)) ([22886af](https://github.com/CloudNationHQ/az-cn-module-tf-acr/commit/22886afd67e0060973a04ace4b5e830d88b6ffd1))
+* **deps:** bump github.com/stretchr/testify from 1.8.1 to 1.8.4 in /tests ([#24](https://github.com/CloudNationHQ/az-cn-module-tf-acr/issues/24)) ([ea1f9bb](https://github.com/CloudNationHQ/az-cn-module-tf-acr/commit/ea1f9bb963270e8e19d933b0a7e8be1c9f72975e))
+* **deps:** Bump golang.org/x/net from 0.14.0 to 0.17.0 in /tests ([#30](https://github.com/CloudNationHQ/az-cn-module-tf-acr/issues/30)) ([0093efa](https://github.com/CloudNationHQ/az-cn-module-tf-acr/commit/0093efa975af4c2282ff38db2adf5f9a660d156a))
+* fix referenced output names keyvault ([#26](https://github.com/CloudNationHQ/az-cn-module-tf-acr/issues/26)) ([6969ccd](https://github.com/CloudNationHQ/az-cn-module-tf-acr/commit/6969ccd24a61175527ed44d2e368c2b75055e9dc))
+
 ## [0.6.0](https://github.com/CloudNationHQ/az-cn-module-tf-acr/compare/v0.5.0...v0.6.0) (2023-09-18)
 
 
