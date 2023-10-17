@@ -20,6 +20,7 @@ A last key goal is to separate logic from configuration in the module, thereby e
 - utilization of terratest for robust validation.
 - supports enhanced scalability and isolation through dedicated agent pools
 - flexibility to deploy multiple tasks using agent pools
+- integrates seamlessly with private endpoint capabilities for direct and secure connectivity.
 
 The below examples shows the usage when consuming the module:
 
@@ -140,6 +141,46 @@ module "acr" {
 }
 ```
 
+## Usage: private endpoint
+
+```hcl
+module "acr" {
+  source = "github.com/cloudnationhq/az-cn-module-tf-acr"
+
+  registry = {
+    name          = module.naming.container_registry.name_unique
+    location      = module.rg.groups.demo.location
+    resourcegroup = module.rg.groups.demo.name
+    sku           = "Premium"
+
+    private_endpoint = {
+      name         = module.naming.private_endpoint.name
+      dns_zones    = [module.private_dns.zone.id]
+      subnet       = module.network.subnets.sn1.id
+      subresources = ["registry"]
+    }
+  }
+}
+```
+
+To enable private link, the below private dns submodule can be employed:
+
+```hcl
+module "private_dns" {
+  source = "github.com/cloudnationhq/az-cn-module-tf-acr/modules/private-dns"
+
+  providers = {
+    azurerm = azurerm.connectivity
+  }
+
+  zone = {
+    name          = "privatelink.azurecr.io"
+    resourcegroup = "rg-dns-shared-001"
+    vnet          = module.network.vnet.id
+  }
+}
+```
+
 ## Resources
 
 | Name | Type |
@@ -155,6 +196,7 @@ module "acr" {
 | [azurerm_key_vault_secret](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_secret) | resource |
 | [azurerm_container_registry_agent_pool](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/container_registry_agent_pool) | resource |
 | [azurerm_container_registry_task](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/container_registry_task) | resource |
+| [azurerm_private_endpoint](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint) | resource |
 
 ## Inputs
 
@@ -177,6 +219,7 @@ module "acr" {
 - [container registry using replication across different geolocations ](https://github.com/cloudnationhq/az-cn-module-tf-acr/tree/main/examples/replications/main.tf)
 - [container registry access control using scope maps](https://github.com/cloudnationhq/az-cn-module-tf-acr/tree/main/examples/scope-maps/main.tf)
 - [container registry with dedicated agent pools using tasks](https://github.com/cloudnationhq/az-cn-module-tf-acr/tree/main/examples/agentpool-with-tasks/main.tf)
+- [container registry using private endpoint](https://github.com/cloudnationhq/az-cn-module-tf-acr/tree/main/examples/private-endpoint/main.tf)
 
 ## Testing
 
@@ -199,6 +242,8 @@ For agent pool tasks, a personal access token with the repo scope is required
 Using a dedicated module, we've developed a naming convention for resources that's based on specific regular expressions for each type, ensuring correct abbreviations and offering flexibility with multiple prefixes and suffixes
 
 Full examples detailing all usages, along with integrations with dependency modules, are located in the examples directory
+
+To integrate seamlessly with the enterprise scale's centrally managed private dns zones within a connectivity subscription, you can employ the private dns submodule, designed to work effectively with an aliased provider.
 
 ## Authors
 
