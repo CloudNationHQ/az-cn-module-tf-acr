@@ -221,3 +221,25 @@ resource "azurerm_container_registry_task" "tasks" {
     }
   }
 }
+
+# private endpoint
+resource "azurerm_private_endpoint" "endpoint" {
+  for_each = contains(keys(var.registry), "private_endpoint") ? { "default" = var.registry.private_endpoint } : {}
+
+  name                = var.registry.private_endpoint.name
+  location            = var.registry.location
+  resource_group_name = var.registry.resourcegroup
+  subnet_id           = var.registry.private_endpoint.subnet
+
+  private_service_connection {
+    name                           = "endpoint"
+    is_manual_connection           = try(each.value.is_manual_connection, false)
+    private_connection_resource_id = azurerm_container_registry.acr.id
+    subresource_names              = each.value.subresources
+  }
+
+  private_dns_zone_group {
+    name                 = "default"
+    private_dns_zone_ids = var.registry.private_endpoint.dns_zones
+  }
+}
