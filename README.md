@@ -170,6 +170,14 @@ module "acr" {
 | `acr` | contains all container registry config |
 | `subscriptionId` | contains the id of the current subscription |
 
+## Examples
+
+- [multiple container registries](https://github.com/cloudnationhq/az-cn-module-tf-acr/tree/main/examples/multiple/main.tf)
+- [container registry using encryption](https://github.com/cloudnationhq/az-cn-module-tf-acr/tree/main/examples/encryption/main.tf)
+- [container registry using replication across different geolocations ](https://github.com/cloudnationhq/az-cn-module-tf-acr/tree/main/examples/replications/main.tf)
+- [container registry access control using scope maps](https://github.com/cloudnationhq/az-cn-module-tf-acr/tree/main/examples/scope-maps/main.tf)
+- [container registry with dedicated agent pools using tasks](https://github.com/cloudnationhq/az-cn-module-tf-acr/tree/main/examples/agentpool-with-tasks/main.tf)
+
 ## Testing
 
 As a prerequirement, please ensure that both go and terraform are properly installed on your system.
